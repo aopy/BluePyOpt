@@ -1,0 +1,5 @@
+bluepyopt.parameters
+====================
+
+.. automodule:: bluepyopt.parameters
+   :members:           

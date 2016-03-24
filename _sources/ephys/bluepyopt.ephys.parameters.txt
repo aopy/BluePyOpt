@@ -1,0 +1,5 @@
+bluepyopt.ephys.parameters
+==========================
+
+.. automodule:: bluepyopt.ephys.parameters
+   :members:           

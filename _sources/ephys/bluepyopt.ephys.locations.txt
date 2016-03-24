@@ -1,0 +1,5 @@
+bluepyopt.ephys.locations
+=========================
+
+.. automodule:: bluepyopt.ephys.locations
+   :members:           

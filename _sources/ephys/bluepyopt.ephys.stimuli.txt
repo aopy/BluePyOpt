@@ -1,0 +1,5 @@
+bluepyopt.ephys.stimuli
+=======================
+
+.. automodule:: bluepyopt.ephys.stimuli
+   :members:           

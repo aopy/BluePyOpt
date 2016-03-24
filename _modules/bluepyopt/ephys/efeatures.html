@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bluepyopt.ephys.efeatures &mdash; bluepyopt 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="bluepyopt 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> bluepyopt
+          
+
+          
+            
+            <img src="../../../_static/bbp.jpg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Python API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">bluepyopt</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>bluepyopt.ephys.efeatures</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bluepyopt.ephys.efeatures</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;eFeature classes&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2016, EPFL/Blue Brain Project</span>
+
+<span class="sd"> This file is part of BluePyOpt &lt;https://github.com/BlueBrain/BluePyOpt&gt;</span>
+
+<span class="sd"> This library is free software; you can redistribute it and/or modify it under</span>
+<span class="sd"> the terms of the GNU Lesser General Public License version 3.0 as published</span>
+<span class="sd"> by the Free Software Foundation.</span>
+
+<span class="sd"> This library is distributed in the hope that it will be useful, but WITHOUT</span>
+<span class="sd"> ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</span>
+<span class="sd"> FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</span>
+<span class="sd"> details.</span>
+
+<span class="sd"> You should have received a copy of the GNU Lesser General Public License</span>
+<span class="sd"> along with this library; if not, write to the Free Software Foundation, Inc.,</span>
+<span class="sd"> 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="EFeature"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.efeatures.html#bluepyopt.ephys.efeatures.EFeature">[docs]</a><span class="k">class</span> <span class="nc">EFeature</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;EPhys feature&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+</div>
+<div class="viewcode-block" id="eFELFeature"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.efeatures.html#bluepyopt.ephys.efeatures.eFELFeature">[docs]</a><span class="k">class</span> <span class="nc">eFELFeature</span><span class="p">(</span><span class="n">EFeature</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;eFEL feature&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">efel_feature_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">recording_names</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">stim_start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">stim_end</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">exp_mean</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">exp_std</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
+
+        <span class="n">EFeature</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">recording_names</span> <span class="o">=</span> <span class="n">recording_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">efel_feature_name</span> <span class="o">=</span> <span class="n">efel_feature_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exp_mean</span> <span class="o">=</span> <span class="n">exp_mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exp_std</span> <span class="o">=</span> <span class="n">exp_std</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stim_start</span> <span class="o">=</span> <span class="n">stim_start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stim_end</span> <span class="o">=</span> <span class="n">stim_end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+
+    <span class="k">def</span> <span class="nf">_construct_efel_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct trace that can be passed to eFEL&quot;&quot;&quot;</span>
+
+        <span class="n">trace</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">recording_names</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s1">&#39;eFELFeature: </span><span class="se">\&#39;\&#39;</span><span class="s1"> needs to be in recording_names&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">location_name</span><span class="p">,</span> <span class="n">recording_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">recording_names</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">location_name</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">postfix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">postfix</span> <span class="o">=</span> <span class="s1">&#39;;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">location_name</span>
+            <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;T</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">postfix</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">responses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">recording_names</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+            <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;V</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">postfix</span><span class="p">]</span> <span class="o">=</span> <span class="n">responses</span><span class="p">[</span><span class="n">recording_name</span><span class="p">][</span><span class="s1">&#39;voltage&#39;</span><span class="p">]</span>
+            <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;stim_start</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">postfix</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">stim_start</span><span class="p">]</span>
+            <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;stim_end</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">postfix</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">stim_end</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">trace</span>
+
+<div class="viewcode-block" id="eFELFeature.calculate_feature"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.efeatures.html#bluepyopt.ephys.efeatures.eFELFeature.calculate_feature">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate feature value&quot;&quot;&quot;</span>
+
+        <span class="n">efel_trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_efel_trace</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+
+        <span class="kn">import</span> <span class="nn">efel</span>
+        <span class="k">return</span> <span class="n">efel</span><span class="o">.</span><span class="n">getMeanFeatureValues</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">efel_trace</span><span class="p">],</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">efel_feature_name</span><span class="p">],</span>
+            <span class="n">raise_warnings</span><span class="o">=</span><span class="bp">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">efel_feature_name</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="eFELFeature.calculate_score"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.efeatures.html#bluepyopt.ephys.efeatures.eFELFeature.calculate_score">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responses</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the score&quot;&quot;&quot;</span>
+
+        <span class="n">efel_trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_efel_trace</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+
+        <span class="kn">import</span> <span class="nn">efel</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+            <span class="n">efel</span><span class="o">.</span><span class="n">setThreshold</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span>
+
+        <span class="n">score</span> <span class="o">=</span> <span class="n">efel</span><span class="o">.</span><span class="n">getDistance</span><span class="p">(</span>
+            <span class="n">efel_trace</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">efel_feature_name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exp_mean</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exp_std</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Calculated score for </span><span class="si">%s</span><span class="s1">: </span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">score</span>
+</div>
+<div class="viewcode-block" id="eFELFeature.__str__"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.efeatures.html#bluepyopt.ephys.efeatures.eFELFeature.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String representation&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> for </span><span class="si">%s</span><span class="s2"> with stim start </span><span class="si">%s</span><span class="s2"> and end </span><span class="si">%s</span><span class="s2">, &quot;</span> \
+            <span class="s2">&quot;exp mean </span><span class="si">%s</span><span class="s2"> and std </span><span class="si">%s</span><span class="s2"> and AP threshold override </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> \
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">efel_feature_name</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">recording_names</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">stim_start</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">stim_end</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">exp_mean</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">exp_std</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, BBP, EPFL.
+      Last updated on Mar 24, 2016.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bluepyopt.ephys.evaluators &mdash; bluepyopt 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="bluepyopt 1.0 documentation" href="../index.html"/>
+        <link rel="up" title="ephys model API" href="../ephys.html"/>
+        <link rel="next" title="bluepyopt.ephys.models" href="bluepyopt.ephys.models.html"/>
+        <link rel="prev" title="bluepyopt.ephys.stimuli" href="bluepyopt.ephys.stimuli.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> bluepyopt
+          
+
+          
+            
+            <img src="../_static/bbp.jpg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../optimisations.html">General optimisation API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ephys.html">ephys model API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">bluepyopt.ephys.evaluators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.models.html">bluepyopt.ephys.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.efeatures.html">bluepyopt.ephys.efeatures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.locations.html">bluepyopt.ephys.locations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.mechanisms.html">bluepyopt.ephys.mechanisms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.morphologies.html">bluepyopt.ephys.morphologies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.objectives.html">bluepyopt.ephys.objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.parameters.html">bluepyopt.ephys.parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.parameterscalers.html">bluepyopt.ephys.parameterscalers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.protocols.html">bluepyopt.ephys.protocols</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.recordings.html">bluepyopt.ephys.recordings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.responses.html">bluepyopt.ephys.responses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.objectivescalculators.html">bluepyopt.ephys.objectivescalculators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bluepyopt.ephys.stimuli.html">bluepyopt.ephys.stimuli</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">bluepyopt</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../api.html">Python API</a> &raquo;</li>
+      
+          <li><a href="../ephys.html">ephys model API</a> &raquo;</li>
+      
+    <li>bluepyopt.ephys.evaluators</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/ephys/bluepyopt.ephys.evaluators.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bluepyopt.ephys.evaluators">
+<span id="bluepyopt-ephys-evaluators"></span><h1>bluepyopt.ephys.evaluators<a class="headerlink" href="#module-bluepyopt.ephys.evaluators" title="Permalink to this headline">¶</a></h1>
+<p>Cell evaluator class</p>
+<dl class="class">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator">
+<em class="property">class </em><code class="descclassname">bluepyopt.ephys.evaluators.</code><code class="descname">CellEvaluator</code><span class="sig-paren">(</span><em>cell_model=None</em>, <em>param_names=None</em>, <em>fitness_protocols=None</em>, <em>fitness_calculator=None</em>, <em>isolate_protocols=True</em>, <em>sim=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Simple cell class</p>
+<p>Constructor</p>
+<dl class="method">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>param_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run evaluation with lists as input and outputs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.evaluate_with_dicts">
+<code class="descname">evaluate_with_dicts</code><span class="sig-paren">(</span><em>param_dict=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator.evaluate_with_dicts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.evaluate_with_dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run evaluation with dict as input and output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.evaluate_with_lists">
+<code class="descname">evaluate_with_lists</code><span class="sig-paren">(</span><em>param_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator.evaluate_with_lists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.evaluate_with_lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run evaluation with lists as input and outputs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.objective_dict">
+<code class="descname">objective_dict</code><span class="sig-paren">(</span><em>objective_array</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator.objective_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.objective_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert objective_array in objective_dict</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.objectives">
+<code class="descname">objectives</code><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.objectives" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return objectives</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.param_dict">
+<code class="descname">param_dict</code><span class="sig-paren">(</span><em>param_array</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator.param_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.param_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert param_array in param_dict</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.params">
+<code class="descname">params</code><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return params of this evaluation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.run_protocol">
+<code class="descname">run_protocol</code><span class="sig-paren">(</span><em>protocol</em>, <em>param_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator.run_protocol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.run_protocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run protocols</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bluepyopt.ephys.evaluators.CellEvaluator.run_protocols">
+<code class="descname">run_protocols</code><span class="sig-paren">(</span><em>protocols</em>, <em>param_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bluepyopt/ephys/evaluators.html#CellEvaluator.run_protocols"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bluepyopt.ephys.evaluators.CellEvaluator.run_protocols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a set of protocols</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bluepyopt.ephys.models.html" class="btn btn-neutral float-right" title="bluepyopt.ephys.models" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bluepyopt.ephys.stimuli.html" class="btn btn-neutral" title="bluepyopt.ephys.stimuli" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, BBP, EPFL.
+      Last updated on Mar 24, 2016.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

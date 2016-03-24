@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bluepyopt.optimisations &mdash; bluepyopt 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="bluepyopt 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> bluepyopt
+          
+
+          
+            
+            <img src="../../_static/bbp.jpg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Python API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">bluepyopt</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>bluepyopt.optimisations</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bluepyopt.optimisations</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Optimisation class&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2016, EPFL/Blue Brain Project</span>
+
+<span class="sd"> This file is part of BluePyOpt &lt;https://github.com/BlueBrain/BluePyOpt&gt;</span>
+
+<span class="sd"> This library is free software; you can redistribute it and/or modify it under</span>
+<span class="sd"> the terms of the GNU Lesser General Public License version 3.0 as published</span>
+<span class="sd"> by the Free Software Foundation.</span>
+
+<span class="sd"> This library is distributed in the hope that it will be useful, but WITHOUT</span>
+<span class="sd"> ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</span>
+<span class="sd"> FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</span>
+<span class="sd"> details.</span>
+
+<span class="sd"> You should have received a copy of the GNU Lesser General Public License</span>
+<span class="sd"> along with this library; if not, write to the Free Software Foundation, Inc.,</span>
+<span class="sd"> 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># pylint: disable=R0912</span>
+
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+
+<span class="kn">import</span> <span class="nn">deap</span>
+<span class="kn">import</span> <span class="nn">deap.base</span>
+<span class="kn">import</span> <span class="nn">deap.algorithms</span>
+<span class="kn">import</span> <span class="nn">deap.tools</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;__main__&#39;</span><span class="p">)</span>
+
+<span class="c1"># TODO decide which variables go in constructor, which ones go in &#39;run&#39; function</span>
+<span class="c1"># TODO abstract the algorithm by creating a class for every algorithm, that way</span>
+<span class="c1"># settings of the algorithm can be stored in objects of these classes</span>
+
+
+<div class="viewcode-block" id="Optimisation"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.Optimisation">[docs]</a><span class="k">class</span> <span class="nc">Optimisation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Optimisation class&quot;&quot;&quot;</span>
+
+    <span class="n">_instance_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evaluator</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">evaluator</span>
+
+</div>
+<div class="viewcode-block" id="WeightedSumFitness"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.WeightedSumFitness">[docs]</a><span class="k">class</span> <span class="nc">WeightedSumFitness</span><span class="p">(</span><span class="n">deap</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Fitness</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Fitness that compares by weighted sum&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">(),</span> <span class="n">obj_size</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">obj_size</span> <span class="k">if</span> <span class="n">obj_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">WeightedSumFitness</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">weighted_sum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Weighted sum of wvalues&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wvalues</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Weighted sum of values&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_sum</span> <span class="o">&lt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">weighted_sum</span>
+
+    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weighted_sum</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">weighted_sum</span>
+
+<div class="viewcode-block" id="WeightedSumFitness.__deepcopy__"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.WeightedSumFitness.__deepcopy__">[docs]</a>    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Override deepcopy&quot;&quot;&quot;</span>
+
+        <span class="n">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+</div></div>
+<div class="viewcode-block" id="WSListIndividual"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.WSListIndividual">[docs]</a><span class="k">class</span> <span class="nc">WSListIndividual</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Individual consisting of list with weighted sum field&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitness</span> <span class="o">=</span> <span class="n">WeightedSumFitness</span><span class="p">(</span><span class="n">obj_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;obj_size&#39;</span><span class="p">])</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;obj_size&#39;</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">WSListIndividual</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="DEAPOptimisation"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.DEAPOptimisation">[docs]</a><span class="k">class</span> <span class="nc">DEAPOptimisation</span><span class="p">(</span><span class="n">Optimisation</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;DEAP Optimisation class&quot;&quot;&quot;</span>
+
+    <span class="n">_instance_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evaluator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">use_scoop</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">offspring_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">eta</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">mutpb</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">cxpb</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">map_function</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">DEAPOptimisation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">)</span>
+
+        <span class="n">Optimisation</span><span class="o">.</span><span class="n">_instance_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_scoop</span> <span class="o">=</span> <span class="n">use_scoop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offspring_size</span> <span class="o">=</span> <span class="n">offspring_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span> <span class="o">=</span> <span class="n">cxpb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mutpb</span> <span class="o">=</span> <span class="n">mutpb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_function</span> <span class="o">=</span> <span class="n">map_function</span>
+
+        <span class="c1"># Create a DEAP toolbox</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span> <span class="o">=</span> <span class="n">deap</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Toolbox</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_deap</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DEAPOptimisation.setup_deap"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.DEAPOptimisation.setup_deap">[docs]</a>    <span class="k">def</span> <span class="nf">setup_deap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set up optimisation&quot;&quot;&quot;</span>
+
+        <span class="c1"># Number of objectives</span>
+        <span class="n">OBJ_SIZE</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluator</span><span class="o">.</span><span class="n">objectives</span><span class="p">)</span>
+
+        <span class="c1"># Set random seed</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="c1"># Eta parameter of crossover / mutation parameters</span>
+        <span class="c1"># Basically defines how much they &#39;spread&#39; solution around</span>
+        <span class="c1"># The lower this value, the more spread</span>
+        <span class="n">ETA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span>
+
+        <span class="c1"># Number of parameters</span>
+        <span class="n">IND_SIZE</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluator</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="c1"># Bounds for the parameters</span>
+
+        <span class="n">LOWER</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">UPPER</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluator</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+            <span class="n">LOWER</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">)</span>
+            <span class="n">UPPER</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">)</span>
+
+        <span class="c1"># Define a function that will uniformly pick an individual</span>
+        <span class="k">def</span> <span class="nf">uniform</span><span class="p">(</span><span class="n">lower_list</span><span class="p">,</span> <span class="n">upper_list</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Fill array &quot;&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lower_list</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">)</span> <span class="k">for</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="ow">in</span>
+                        <span class="nb">zip</span><span class="p">(</span><span class="n">lower_list</span><span class="p">,</span> <span class="n">upper_list</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">lower_list</span><span class="p">,</span> <span class="n">upper_list</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)]</span>
+
+        <span class="c1"># Register the &#39;uniform&#39; function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;uniformparams&quot;</span><span class="p">,</span> <span class="n">uniform</span><span class="p">,</span> <span class="n">LOWER</span><span class="p">,</span> <span class="n">UPPER</span><span class="p">,</span> <span class="n">IND_SIZE</span><span class="p">)</span>
+
+        <span class="c1"># Register the individual format</span>
+        <span class="c1"># An indiviual is create by WSListIndividual and parameters</span>
+        <span class="c1"># are initially</span>
+        <span class="c1"># picked by &#39;uniform&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+            <span class="s2">&quot;Individual&quot;</span><span class="p">,</span>
+            <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">initIterate</span><span class="p">,</span>
+            <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">WSListIndividual</span><span class="p">,</span> <span class="n">obj_size</span><span class="o">=</span><span class="n">OBJ_SIZE</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">uniformparams</span><span class="p">)</span>
+
+        <span class="c1"># Register the population format. It is a list of individuals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+            <span class="s2">&quot;population&quot;</span><span class="p">,</span>
+            <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">initRepeat</span><span class="p">,</span>
+            <span class="nb">list</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">Individual</span><span class="p">)</span>
+
+        <span class="c1"># Register the evaluation function for the individuals</span>
+        <span class="c1"># import deap_efel_eval1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;evaluate&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate_with_lists</span><span class="p">)</span>
+
+        <span class="c1"># Register the mate operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+            <span class="s2">&quot;mate&quot;</span><span class="p">,</span>
+            <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">cxSimulatedBinaryBounded</span><span class="p">,</span>
+            <span class="n">eta</span><span class="o">=</span><span class="n">ETA</span><span class="p">,</span>
+            <span class="n">low</span><span class="o">=</span><span class="n">LOWER</span><span class="p">,</span>
+            <span class="n">up</span><span class="o">=</span><span class="n">UPPER</span><span class="p">)</span>
+
+        <span class="c1"># Register the mutation operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+            <span class="s2">&quot;mutate&quot;</span><span class="p">,</span>
+            <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">mutPolynomialBounded</span><span class="p">,</span>
+            <span class="n">eta</span><span class="o">=</span><span class="n">ETA</span><span class="p">,</span>
+            <span class="n">low</span><span class="o">=</span><span class="n">LOWER</span><span class="p">,</span>
+            <span class="n">up</span><span class="o">=</span><span class="n">UPPER</span><span class="p">,</span>
+            <span class="n">indpb</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1"># Register the variate operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;variate&quot;</span><span class="p">,</span> <span class="n">deap</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">varAnd</span><span class="p">)</span>
+
+        <span class="c1"># Register the selector (picks parents from population)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;select&quot;</span><span class="p">,</span> <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">selIBEA</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">_reduce_method</span><span class="p">(</span><span class="n">meth</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Overwrite reduce&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="p">(</span><span class="n">meth</span><span class="o">.</span><span class="n">__self__</span><span class="p">,</span> <span class="n">meth</span><span class="o">.</span><span class="n">__func__</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+        <span class="kn">import</span> <span class="nn">copy_reg</span>
+        <span class="kn">import</span> <span class="nn">types</span>
+        <span class="n">copy_reg</span><span class="o">.</span><span class="n">pickle</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">,</span> <span class="n">_reduce_method</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_scoop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_function</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s1">&#39;Impossible to use scoop is providing self &#39;</span>
+                    <span class="s1">&#39;defined map function: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">map_function</span><span class="p">)</span>
+
+            <span class="kn">from</span> <span class="nn">scoop</span> <span class="kn">import</span> <span class="n">futures</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;map&quot;</span><span class="p">,</span> <span class="n">futures</span><span class="o">.</span><span class="n">map</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_function</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;map&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_function</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DEAPOptimisation.run"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.DEAPOptimisation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">max_ngen</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">continue_cp</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">cp_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">cp_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run optimisation&quot;&quot;&quot;</span>
+
+        <span class="c1"># Total number of generation to run</span>
+        <span class="n">NGEN</span> <span class="o">=</span> <span class="n">max_ngen</span>
+
+        <span class="c1"># Crossover, mutation probabilities</span>
+        <span class="n">CXPB</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span>
+        <span class="n">MUTPB</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutpb</span>
+
+        <span class="c1"># Total population size of EA</span>
+        <span class="c1"># ALPHA = POP_SIZE</span>
+        <span class="c1"># Total parent population size of EA</span>
+        <span class="n">MU</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offspring_size</span>
+        <span class="c1"># Total offspring size of EA</span>
+        <span class="c1"># LAMBDA = OFFSPRING_SIZE</span>
+
+        <span class="c1"># Generate the population object</span>
+        <span class="n">pop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">MU</span><span class="p">)</span>
+
+        <span class="n">hof</span> <span class="o">=</span> <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">HallOfFame</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">Statistics</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ind</span><span class="p">:</span> <span class="n">ind</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">sum</span><span class="p">)</span>
+
+        <span class="kn">import</span> <span class="nn">numpy</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">std</span><span class="p">)</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">)</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+
+        <span class="n">pop</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">history</span> <span class="o">=</span> <span class="n">eaAlphaMuPlusLambdaCheckpoint</span><span class="p">(</span>
+            <span class="n">pop</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">toolbox</span><span class="p">,</span>
+            <span class="n">MU</span><span class="p">,</span>
+            <span class="bp">None</span><span class="p">,</span>
+            <span class="n">CXPB</span><span class="p">,</span>
+            <span class="n">MUTPB</span><span class="p">,</span>
+            <span class="n">NGEN</span><span class="p">,</span>
+            <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">,</span>
+            <span class="n">halloffame</span><span class="o">=</span><span class="n">hof</span><span class="p">,</span>
+            <span class="n">cp_frequency</span><span class="o">=</span><span class="n">cp_frequency</span><span class="p">,</span>
+            <span class="n">continue_cp</span><span class="o">=</span><span class="n">continue_cp</span><span class="p">,</span>
+            <span class="n">cp_filename</span><span class="o">=</span><span class="n">cp_filename</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pop</span><span class="p">,</span> <span class="n">hof</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">history</span>
+
+<span class="c1"># pylint: disable=R0912, R0914</span>
+
+<span class="c1"># TODO this function shouldn&#39;t be here</span>
+
+</div></div>
+<div class="viewcode-block" id="eaAlphaMuPlusLambdaCheckpoint"><a class="viewcode-back" href="../../optimisations/bluepyopt.optimisations.html#bluepyopt.optimisations.eaAlphaMuPlusLambdaCheckpoint">[docs]</a><span class="k">def</span> <span class="nf">eaAlphaMuPlusLambdaCheckpoint</span><span class="p">(</span>
+        <span class="n">population</span><span class="p">,</span>
+        <span class="n">toolbox</span><span class="p">,</span>
+        <span class="n">mu</span><span class="p">,</span>
+        <span class="n">_</span><span class="p">,</span>
+        <span class="n">cxpb</span><span class="p">,</span>
+        <span class="n">mutpb</span><span class="p">,</span>
+        <span class="n">ngen</span><span class="p">,</span>
+        <span class="n">stats</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">halloffame</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">cp_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">cp_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">continue_cp</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This is the :math:`(~\alpha,\mu~,~\lambda)` evolutionary algorithm.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">continue_cp</span><span class="p">:</span>
+        <span class="c1"># A file name has been given, then load the data from the file</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">cp_filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">))</span>
+        <span class="n">population</span> <span class="o">=</span> <span class="n">cp</span><span class="p">[</span><span class="s2">&quot;population&quot;</span><span class="p">]</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="n">cp</span><span class="p">[</span><span class="s2">&quot;parents&quot;</span><span class="p">]</span>
+        <span class="n">start_gen</span> <span class="o">=</span> <span class="n">cp</span><span class="p">[</span><span class="s2">&quot;generation&quot;</span><span class="p">]</span>
+        <span class="n">halloffame</span> <span class="o">=</span> <span class="n">cp</span><span class="p">[</span><span class="s2">&quot;halloffame&quot;</span><span class="p">]</span>
+        <span class="n">logbook</span> <span class="o">=</span> <span class="n">cp</span><span class="p">[</span><span class="s2">&quot;logbook&quot;</span><span class="p">]</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="n">cp</span><span class="p">[</span><span class="s2">&quot;history&quot;</span><span class="p">]</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">setstate</span><span class="p">(</span><span class="n">cp</span><span class="p">[</span><span class="s2">&quot;rndstate&quot;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Start a new evolution</span>
+        <span class="n">start_gen</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="n">population</span><span class="p">[:]</span>
+        <span class="n">logbook</span> <span class="o">=</span> <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">Logbook</span><span class="p">()</span>
+        <span class="n">logbook</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gen&#39;</span><span class="p">,</span> <span class="s1">&#39;nevals&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="n">stats</span> <span class="k">else</span> <span class="p">[])</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="n">deap</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">History</span><span class="p">()</span>
+
+        <span class="c1"># TODO this first loop should be not be repeated !</span>
+
+        <span class="c1"># Evaluate the individuals with an invalid fitness</span>
+        <span class="n">invalid_ind</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">population</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ind</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">valid</span><span class="p">]</span>
+        <span class="n">fitnesses</span> <span class="o">=</span> <span class="n">toolbox</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">toolbox</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="n">invalid_ind</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">fit</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">invalid_ind</span><span class="p">,</span> <span class="n">fitnesses</span><span class="p">):</span>
+            <span class="n">ind</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">fit</span>
+
+        <span class="n">record</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">population</span><span class="p">)</span> <span class="k">if</span> <span class="n">stats</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">logbook</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="n">start_gen</span><span class="p">,</span> <span class="n">nevals</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">invalid_ind</span><span class="p">),</span> <span class="o">**</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="c1"># Update the hall of fame with the generated individuals</span>
+        <span class="k">if</span> <span class="n">halloffame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">halloffame</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">history</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+
+    <span class="c1"># if history is not None:</span>
+    <span class="c1">#    toolbox.decorate(&quot;mate&quot;, history.decorator)</span>
+    <span class="c1">#    toolbox.decorate(&quot;mutate&quot;, history.decorator)</span>
+
+    <span class="c1"># Begin the generational process</span>
+    <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_gen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ngen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Vary the parents</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">toolbox</span><span class="p">,</span> <span class="s1">&#39;variate&#39;</span><span class="p">):</span>
+            <span class="n">offspring</span> <span class="o">=</span> <span class="n">toolbox</span><span class="o">.</span><span class="n">variate</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">,</span> <span class="n">mutpb</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">offspring</span> <span class="o">=</span> <span class="n">deap</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">varAnd</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">,</span> <span class="n">mutpb</span><span class="p">)</span>
+
+        <span class="n">population</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">parents</span> <span class="o">+</span> <span class="n">offspring</span>
+
+        <span class="c1"># Evaluate the individuals with an invalid fitness</span>
+        <span class="n">invalid_ind</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">offspring</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ind</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">valid</span><span class="p">]</span>
+        <span class="n">fitnesses</span> <span class="o">=</span> <span class="n">toolbox</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">toolbox</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="n">invalid_ind</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">fit</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">invalid_ind</span><span class="p">,</span> <span class="n">fitnesses</span><span class="p">):</span>
+            <span class="n">ind</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">fit</span>
+
+        <span class="c1"># Update the hall of fame with the generated individuals</span>
+        <span class="k">if</span> <span class="n">halloffame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">halloffame</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">offspring</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">history</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">history</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">offspring</span><span class="p">)</span>
+
+        <span class="c1"># Select the next generation parents</span>
+        <span class="n">parents</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">toolbox</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+
+        <span class="c1"># Update the statistics with the new population</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">population</span><span class="p">)</span> <span class="k">if</span> <span class="n">stats</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">logbook</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="n">gen</span><span class="p">,</span> <span class="n">nevals</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">invalid_ind</span><span class="p">),</span> <span class="o">**</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">logbook</span><span class="o">.</span><span class="n">stream</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cp_filename</span> <span class="ow">and</span> <span class="n">cp_frequency</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gen</span> <span class="o">%</span> <span class="n">cp_frequency</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">cp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">population</span><span class="o">=</span><span class="n">population</span><span class="p">,</span> <span class="n">generation</span><span class="o">=</span><span class="n">gen</span><span class="p">,</span>
+                          <span class="n">parents</span><span class="o">=</span><span class="n">parents</span><span class="p">,</span>
+                          <span class="n">halloffame</span><span class="o">=</span><span class="n">halloffame</span><span class="p">,</span>
+                          <span class="n">history</span><span class="o">=</span><span class="n">history</span><span class="p">,</span>
+                          <span class="n">logbook</span><span class="o">=</span><span class="n">logbook</span><span class="p">,</span> <span class="n">rndstate</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">getstate</span><span class="p">())</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span>
+                    <span class="n">cp</span><span class="p">,</span>
+                    <span class="nb">open</span><span class="p">(</span><span class="n">cp_filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Wrote checkpoint to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">cp_filename</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">population</span><span class="p">,</span> <span class="n">logbook</span><span class="p">,</span> <span class="n">history</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, BBP, EPFL.
+      Last updated on Mar 24, 2016.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

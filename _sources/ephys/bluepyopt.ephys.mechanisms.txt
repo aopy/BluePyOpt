@@ -1,0 +1,5 @@
+bluepyopt.ephys.mechanisms
+==========================
+
+.. automodule:: bluepyopt.ephys.mechanisms
+   :members:           

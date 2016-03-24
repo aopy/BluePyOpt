@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bluepyopt.ephys.parameters &mdash; bluepyopt 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="bluepyopt 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> bluepyopt
+          
+
+          
+            
+            <img src="../../../_static/bbp.jpg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Python API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">bluepyopt</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>bluepyopt.ephys.parameters</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bluepyopt.ephys.parameters</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Parameter classes&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2016, EPFL/Blue Brain Project</span>
+
+<span class="sd"> This file is part of BluePyOpt &lt;https://github.com/BlueBrain/BluePyOpt&gt;</span>
+
+<span class="sd"> This library is free software; you can redistribute it and/or modify it under</span>
+<span class="sd"> the terms of the GNU Lesser General Public License version 3.0 as published</span>
+<span class="sd"> by the Free Software Foundation.</span>
+
+<span class="sd"> This library is distributed in the hope that it will be useful, but WITHOUT</span>
+<span class="sd"> ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</span>
+<span class="sd"> FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more</span>
+<span class="sd"> details.</span>
+
+<span class="sd"> You should have received a copy of the GNU Lesser General Public License</span>
+<span class="sd"> along with this library; if not, write to the Free Software Foundation, Inc.,</span>
+<span class="sd"> 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">parameterscalers</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="c1"># TODO location and stimulus parameters should also be optimisable</span>
+
+
+<div class="viewcode-block" id="Parameter"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.Parameter">[docs]</a><span class="k">class</span> <span class="nc">Parameter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Base parameter class&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_bounds</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span> <span class="o">=</span> <span class="n">frozen</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lower_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Lower bound&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">upper_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Lower bound&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parameter value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+<div class="viewcode-block" id="Parameter.freeze"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.Parameter.freeze">[docs]</a>    <span class="k">def</span> <span class="nf">freeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Freeze parameter to certain value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span> <span class="o">=</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="Parameter.unfreeze"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.Parameter.unfreeze">[docs]</a>    <span class="k">def</span> <span class="nf">unfreeze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Unfreeze parameter&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span> <span class="o">=</span> <span class="bp">False</span>
+</div>
+    <span class="nd">@value.setter</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set parameter value&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s1">&#39;Parameter: parameter </span><span class="si">%s</span><span class="s1"> is frozen, unable to change value&#39;</span> <span class="o">%</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_bounds</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Parameter.check_bounds"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.Parameter.check_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">check_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if parameter is within bounds&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s1">&#39;Parameter </span><span class="si">%s</span><span class="s1"> has value </span><span class="si">%s</span><span class="s1"> outside of bounds [</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">),</span>
+                     <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">)))</span>
+
+</div></div>
+<div class="viewcode-block" id="NrnGlobalParameter"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnGlobalParameter">[docs]</a><span class="k">class</span> <span class="nc">NrnGlobalParameter</span><span class="p">(</span><span class="n">Parameter</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Parameter set in the global namespace of neuron&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">param_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Contructor&quot;&quot;&quot;</span>
+
+        <span class="n">Parameter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">frozen</span><span class="o">=</span><span class="n">frozen</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span> <span class="o">=</span> <span class="n">param_name</span>
+
+<div class="viewcode-block" id="NrnGlobalParameter.instantiate"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnGlobalParameter.instantiate">[docs]</a>    <span class="k">def</span> <span class="nf">instantiate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">icell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instantiate&quot;&quot;&quot;</span>
+
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">neuron</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Set </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="NrnGlobalParameter.__str__"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnGlobalParameter.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String representation&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NrnGlobalParameter.destroy"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnGlobalParameter.destroy">[docs]</a>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Destroy parameter instantation&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+</div></div>
+<div class="viewcode-block" id="NrnSectionParameter"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnSectionParameter">[docs]</a><span class="k">class</span> <span class="nc">NrnSectionParameter</span><span class="p">(</span><span class="n">Parameter</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Parameter of a section&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">param_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">value_scaler</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">locations</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Contructor&quot;&quot;&quot;</span>
+
+        <span class="n">Parameter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">frozen</span><span class="o">=</span><span class="n">frozen</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">locations</span> <span class="o">=</span> <span class="n">locations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span> <span class="o">=</span> <span class="n">param_name</span>
+        <span class="c1"># TODO value_scaler has to be made more general</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span> <span class="o">=</span> <span class="n">value_scaler</span>
+        <span class="c1"># TODO add a default value for a scaler that is picklable</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span> <span class="o">=</span> <span class="n">parameterscalers</span><span class="o">.</span><span class="n">NrnSegmentLinearScaler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_scale_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span><span class="o">.</span><span class="n">scale</span>
+
+<div class="viewcode-block" id="NrnSectionParameter.instantiate"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnSectionParameter.instantiate">[docs]</a>    <span class="k">def</span> <span class="nf">instantiate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">icell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instantiate&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">:</span>
+            <span class="n">iseclist</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">sim</span><span class="o">=</span><span class="n">sim</span><span class="p">,</span> <span class="n">icell</span><span class="o">=</span><span class="n">icell</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">iseclist</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">value_scale_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">section</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;Set </span><span class="si">%s</span><span class="s1"> in </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span>
+                <span class="n">location</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NrnSectionParameter.destroy"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnSectionParameter.destroy">[docs]</a>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Destroy parameter instantation&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="NrnSectionParameter.__str__"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnSectionParameter.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String representation&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                       <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">],</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                       <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">],</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+
+<span class="c1"># TODO change mech_prefix and mech_param to param_name, and maybe add</span>
+<span class="c1"># NrnRangeMechParameter</span>
+
+</div></div>
+<div class="viewcode-block" id="NrnRangeParameter"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnRangeParameter">[docs]</a><span class="k">class</span> <span class="nc">NrnRangeParameter</span><span class="p">(</span><span class="n">Parameter</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Parameter that has a range over a section&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">frozen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">param_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">value_scaler</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">locations</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Contructor&quot;&quot;&quot;</span>
+
+        <span class="n">Parameter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">frozen</span><span class="o">=</span><span class="n">frozen</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">locations</span> <span class="o">=</span> <span class="n">locations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span> <span class="o">=</span> <span class="n">param_name</span>
+        <span class="c1"># TODO value_scaler has to be made more general</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span> <span class="o">=</span> <span class="n">value_scaler</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span> <span class="o">=</span> <span class="n">parameterscalers</span><span class="o">.</span><span class="n">NrnSegmentLinearScaler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_scale_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span><span class="o">.</span><span class="n">scale</span>
+
+<div class="viewcode-block" id="NrnRangeParameter.instantiate"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnRangeParameter.instantiate">[docs]</a>    <span class="k">def</span> <span class="nf">instantiate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">icell</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instantiate&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">isection</span> <span class="ow">in</span> <span class="n">location</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">sim</span><span class="o">=</span><span class="n">sim</span><span class="p">,</span> <span class="n">icell</span><span class="o">=</span><span class="n">icell</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">isection</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">value_scale_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">seg</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;Set </span><span class="si">%s</span><span class="s1"> in </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1"> with scaler </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span>
+            <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value_scaler</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NrnRangeParameter.destroy"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnRangeParameter.destroy">[docs]</a>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Destroy parameter instantation&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="NrnRangeParameter.__str__"><a class="viewcode-back" href="../../../ephys/bluepyopt.ephys.parameters.html#bluepyopt.ephys.parameters.NrnRangeParameter.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;String representation&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                       <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">],</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                       <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span><span class="p">],</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">param_name</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, BBP, EPFL.
+      Last updated on Mar 24, 2016.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

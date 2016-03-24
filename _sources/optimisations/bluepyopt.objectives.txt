@@ -1,0 +1,5 @@
+bluepyopt.objectives
+====================
+
+.. automodule:: bluepyopt.objectives
+   :members:           

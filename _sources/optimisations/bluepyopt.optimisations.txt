@@ -1,0 +1,5 @@
+bluepyopt.optimisations
+=======================
+
+.. automodule:: bluepyopt.optimisations
+   :members:           
