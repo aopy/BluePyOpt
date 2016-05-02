@@ -8,10 +8,10 @@ from .. import ephys
 class PyNNRecording(ephys.recordings.Recording):
     count = 0
 
-    def __init__(self, name=None, value=None, frozen=None, variable='v'):
+    def __init__(self, name=None, value=None, frozen=None, variable='v', artificial_ap=30.0):
         super(PyNNRecording, self).__init__(name=name, value=value, frozen=frozen)
         self.variable = variable
-        self.artificial_ap = True
+        self.artificial_ap = artificial_ap
 
     def instantiate(self, sim=None, icell=None):
         """Instantiate recording"""
@@ -34,14 +34,14 @@ class PyNNRecording(ephys.recordings.Recording):
         times = signal.times
         vm = signal.magnitude
         n_signals = vm.shape[1]
-        if self.artificial_ap:
+        if self.artificial_ap is not False:
             # add artificial action potentials at the time of each spike
             dt = self.sim.get_time_step()
             for i in range(n_signals):
                 spike_times = data.spiketrains[i].magnitude
                 if spike_times.size > 0:
                     spike_indices = (spike_times/dt).astype(int)
-                    vm[spike_indices, i] = 0.0
+                    vm[spike_indices, i] = self.artificial_ap
         return [ephys.responses.TimeVoltageResponse(self.name, times, vm[:, i])
                 for i in range(n_signals)]
 
