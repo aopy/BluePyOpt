@@ -26,7 +26,7 @@ class PyNNSquarePulse(ephys.stimuli.Stimulus):
             icell.electrode = sim.sim.DCSource(**parameters)
             icell.electrode.inject_into(icell)
 
-    def destroy(self):
+    def destroy(self, sim=None):
         pass
 
 
@@ -36,7 +36,7 @@ class PyNNCurrentPlayStimulus(ephys.stimuli.Stimulus):
         super(PyNNCurrentPlayStimulus, self).__init__()
         self.time_points = time_points
         self.current_points = current_points
-	self.total_duration = total_duration
+        self.total_duration = total_duration
         self.stim = None
 
     def instantiate(self, sim=None, icell=None):
@@ -48,6 +48,6 @@ class PyNNCurrentPlayStimulus(ephys.stimuli.Stimulus):
             icell.electrode = sim.sim.StepCurrentSource(**parameters)
             icell.electrode.inject_into(icell)
 
-    def destroy(self):
+    def destroy(self, sim=None):
         pass
 

@@ -348,21 +348,3 @@ class NrnRangeParameter(NrnParameter, DictMixin):
                                     for location in self.locations],
                                    self.param_name,
                                    self.value if self.frozen else self.bounds)
-
-
-class ArrayParameter(Parameter):
-    """A multi-valued parameter, for population-level paramaterisation.
-
-    The parameter value should be a list or array of floats, of the same
-    size as the population.
-    """
-
-    def check_bounds(self):
-        """Check if parameter is within bounds"""
-        if self.bounds and self._value is not None:
-            if not ((self.lower_bound <= self._value).all() and (self._value <= self.upper_bound).all()):
-                raise Exception(
-                    'Parameter %s has value %s outside of bounds [%s, %s]' %
-                    (self.name, self._value, str(self.lower_bound),
-                     str(self.upper_bound)))
-

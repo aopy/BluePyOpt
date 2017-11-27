@@ -8,8 +8,8 @@ from .. import ephys
 class PyNNRecording(ephys.recordings.Recording):
     count = 0
 
-    def __init__(self, name=None, value=None, frozen=None, variable='v', artificial_ap=30.0):
-        super(PyNNRecording, self).__init__(name=name, value=value, frozen=frozen)
+    def __init__(self, name=None, variable='v', artificial_ap=30.0):
+        super(PyNNRecording, self).__init__(name=name)
         self.variable = variable
         self.artificial_ap = artificial_ap
 
@@ -45,5 +45,5 @@ class PyNNRecording(ephys.recordings.Recording):
         return [ephys.responses.TimeVoltageResponse(self.name, times, vm[:, i])
                 for i in range(n_signals)]
 
-    def destroy(self):
+    def destroy(self, sim=None):
         pass

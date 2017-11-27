@@ -22,18 +22,21 @@ class PopulationEvaluator(ephys.evaluators.CellEvaluator):
             fitness_protocols=None,
             fitness_calculator=None,
             isolate_protocols=True,
-            sim=None):
+            sim=None,
+            use_params_for_seed=False):
 
-        self.cell_model = cell_model
-        self.param_names = param_names
-        # Stimuli used for fitness calculation
-        self.fitness_protocols = fitness_protocols
-        # Fitness value calculator
-        self.fitness_calculator = fitness_calculator
+        super(PopulationEvaluator, self).__init__(cell_model,
+                                                  param_names,
+                                                  fitness_protocols,
+                                                  fitness_calculator,
+                                                  isolate_protocols,
+                                                  sim,
+                                                  use_params_for_seed)
+
         if isolate_protocols:
             logger.warning("PopulationEvaluator does not currently support protocol isolation")
-        self.isolate_protocols = False
-        self.sim = sim
+        if use_params_for_seed:
+            raise NotImplementedError()
 
     def param_dict(self, param_array):
         """Convert param_array in param_dict"""
